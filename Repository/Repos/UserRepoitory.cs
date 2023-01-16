@@ -48,6 +48,19 @@ public class UserRepository : IUserRepository
             return result is not null ? result : null;
         }
     }
+     public async Task<User?> UpdateUser(UpdateDTO user)
+    {
+        using (IDbConnection db = new SqlConnection(_connectionString))
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@userid",user.UserId);
+            parameters.Add("@username",user.Username);
+            parameters.Add("@password",user.Password);
+            parameters.Add("@email",user.Email);
+            var result = await db.QuerySingleOrDefaultAsync<User?>("UpdateUser", parameters,commandType: CommandType.StoredProcedure);
+            return result is not null ? result : null;
+        }
+    }
      public async Task<User?> GetUserByEmail(string email)
     {
         using (IDbConnection db = new SqlConnection(_connectionString))
@@ -56,5 +69,4 @@ public class UserRepository : IUserRepository
             return result is not null ? result : null;
         }
     }
-
 }

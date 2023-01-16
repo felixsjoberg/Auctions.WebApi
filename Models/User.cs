@@ -12,5 +12,6 @@ public class User
     [Required]
     public string Password { get; set; } = null!;
     public List<Bid>? Bids;
+    public Auction? Auction;
 }
 

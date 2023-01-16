@@ -8,5 +8,6 @@ namespace Auctions.WebApi.Repository.Repos
          Task<Boolean> RegisterUser(RegisterDTO user);
          Task<User?> LoginUser(LoginDTO loginDTO);
          Task<User?> GetUserByEmail(string email);
+         Task<User?> UpdateUser(UpdateDTO user);
     }
 }

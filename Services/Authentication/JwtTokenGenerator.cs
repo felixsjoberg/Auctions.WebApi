@@ -22,14 +22,20 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_jwtSettings.SecretKey)),
             SecurityAlgorithms.HmacSha256);
-
+        
+        var claims = new List<Claim>
+        {
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        };
+        
         var securityToken = new JwtSecurityToken(
             issuer:_jwtSettings.Issuer,
             audience:_jwtSettings.Audience,
             expires:DateTime.Now.AddMinutes(_jwtSettings.ExpiryMinutes),
+            claims: claims,
             signingCredentials: signingCredentials);
 
-        return new JwtSecurityTokenHandler().WriteToken(securityToken); 
+        return new JwtSecurityTokenHandler().WriteToken(securityToken);
     }
 }
 
