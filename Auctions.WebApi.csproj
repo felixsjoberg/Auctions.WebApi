@@ -23,7 +23,4 @@
     <None Remove="Swashbuckle.AspNetCore.Filters" />
     <None Remove="Repository\Interfaces\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repository\Interfaces\" />
-  </ItemGroup>
 </Project>

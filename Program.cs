@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Auctions.WebApi.Repository.Interfaces;
 using Auctions.WebApi.Repository.Repos;
 using BankApplication.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,6 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IUserRepository,UserRepository>();
+builder.Services.AddTransient<IAuctionRepository,AuctionRepository>();
 builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
 var jwtSettings = new JwtSettings();
