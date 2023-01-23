@@ -16,7 +16,7 @@ namespace Auctions.WebApi.Repository.Repos
         {
             _connectionString = connectionString.GetConnectionString("Default");
         }
-        public async Task CreateAuction(CreateAuctionDTO auction)
+        public async Task<Boolean> CreateAuction(CreateAuctionDTO auction)
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
@@ -30,7 +30,13 @@ namespace Auctions.WebApi.Repository.Repos
                 parameters.Add("@EndDate", auction.EndDate);
                 parameters.Add("@Status", auction.Status);
                 db.ExecuteScalar("CreateAuction", parameters, commandType: CommandType.StoredProcedure);
+                return true;
             }    
+        }
+
+        public Task<Auction?> UpdateAuction(UpdateAuctionDTO auction)
+        {
+            throw new NotImplementedException();
         }
     }
 }
