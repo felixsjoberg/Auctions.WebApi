@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 using System;
+using Dapper;
 
 namespace Auctions.WebApi.Repository.RemoveBid
 {
@@ -17,6 +18,7 @@ namespace Auctions.WebApi.Repository.RemoveBid
             {
                 using (SqlCommand command = new SqlCommand("RemoveBid", (SqlConnection)db))
                 {
+                    // Kanske ha med detta. DynamicParameters parameters = new DynamicParameters();
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@AuctionID", auctionId);
                     command.Parameters.AddWithValue("@BidId", bidId);
@@ -26,6 +28,7 @@ namespace Auctions.WebApi.Repository.RemoveBid
                     command.Parameters.AddWithValue("@Status", status);
 
                     command.ExecuteNonQuery();
+                    // Kanske ha med detta db.ExecuteScalar("RemoveBid", parameters, commandType: CommandType.StoredProcedure);
                 }
             }
         }

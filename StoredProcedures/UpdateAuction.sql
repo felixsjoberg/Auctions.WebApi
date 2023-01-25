@@ -10,13 +10,22 @@ AS
 BEGIN
     UPDATE dbo.Auctions
     set 
-    UserID=@UserID,
     Title = @Title,
     Description = @Description,
     EndDate = @EndDate,
     Status = @Status
-
     where AuctionID = @AuctionID
+    if BidId = null
+    UPDATE dbo.Auctions
+    set
+    Title = @Title,
+    Description = @Description,
+    EndDate = @EndDate,
+    Status = @Status,
+    Price = @Price
+    where AuctionID = @AuctionID
+
+
 
     SELECT *
     FROM Auctions
