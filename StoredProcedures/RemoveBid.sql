@@ -17,10 +17,8 @@ CREATE PROCEDURE [dbo].[RemoveBid](@AuctionID INT,
 	@Status BIT)
 AS
 BEGIN
-    SELECT *
-    FROM Auctions
-    WHERE BidId = @BidId
-DELETE Auctions (AuctionID, BidId, UserID, BidPrice, BidDate, Status)
+	DELETE FROM Auctions 
+	WHERE BidId = @BidId
 END
 GO
 
