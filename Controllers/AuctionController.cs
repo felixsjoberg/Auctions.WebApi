@@ -30,7 +30,7 @@ public class AuctionController : ControllerBase
     {
         var createdAuction = await _auctionRepository.CreateAuction(auction);
 
-        return createdAuction == true ? Ok("Auction created successfully") : BadRequest("Auction was not created, please try again");
+        return Ok($"Auction created successfully with id {createdAuction}");
     }
 
     // Den h�r h�r till n�gon annan Item egentligen

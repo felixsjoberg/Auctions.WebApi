@@ -16,22 +16,22 @@ namespace Auctions.WebApi.Repository.Repos
         {
             _connectionString = connectionString.GetConnectionString("Default");
         }
-        public async Task<Boolean> CreateAuction(CreateAuctionDTO auction)
+        public async Task<int> CreateAuction(CreateAuctionDTO auction)
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@AuctionID", auction.AuctionID);
+                parameters.Add("@AuctionID", 0, DbType.Int32, direction: ParameterDirection.InputOutput);
                 parameters.Add("@UserID", auction.UserID);
                 parameters.Add("@Title", auction.Title);
                 parameters.Add("@Description", auction.Description);
                 parameters.Add("@Price", auction.Price);
-                parameters.Add("@StartDate", auction.StartDate);
+                parameters.Add("@StartDate", DateTime.Now);
                 parameters.Add("@EndDate", auction.EndDate);
-                parameters.Add("@Status", auction.Status);
                 db.ExecuteScalar("CreateAuction", parameters, commandType: CommandType.StoredProcedure);
-                return true;
-            }    
+
+                return parameters.Get<int>("@AuctionID");
+            }   
         }
 
         public Task<Auction?> UpdateAuction(UpdateAuctionDTO auction)
