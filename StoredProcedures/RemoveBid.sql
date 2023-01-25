@@ -8,7 +8,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[CreateAuction](@AuctionID INT,
+CREATE PROCEDURE [dbo].[RemoveBid](@AuctionID INT,
 	@BidId INT,
 	@UserID UNIQUEIDENTIFIER,
 	@BidPrice INT,
