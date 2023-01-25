@@ -10,7 +10,7 @@ namespace Auctions.WebApi.Repository.Interfaces
 
         // public List<Auction> GetOpenAuctionById(int id);
          public Task <List<Bid>> GetBidsByAuctionId(int auctionId);
-        public Task<Auction?> GetAuctionByID(int ID);
+         public Task<Auction?> GetAuctionByID(int ID);
 
 
 
