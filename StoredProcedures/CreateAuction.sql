@@ -1,7 +1,7 @@
 USE [JensenAuction]
 GO
 
-/****** Object:  StoredProcedure [dbo].[CreateAuction]    Script Date: 2023-01-25 10:50:56 ******/
+/****** Object:  StoredProcedure [dbo].[CreateAuction]    Script Date: 2023-01-25 10:59:04 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -18,8 +18,8 @@ CREATE PROCEDURE [dbo].[CreateAuction](
 	@EndDate DATETIME2(7))
 AS
 BEGIN
-INSERT INTO Auctions (AuctionID, UserID, Title, Description, Price, StartDate, EndDate)
-VALUES (@AuctionID, @UserID, @Title, @Description, @Price, @StartDate, @EndDate)
+INSERT INTO Auctions (UserID, Title, Description, Price, StartDate, EndDate)
+VALUES (@UserID, @Title, @Description, @Price, @StartDate, @EndDate)
 SELECT @AuctionID = @@IDENTITY
 END
 GO
