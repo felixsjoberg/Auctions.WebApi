@@ -1,3 +1,4 @@
+using Auctions.WebApi.DTOs.BidDTO;
 using Auctions.WebApi.Models;
 using Auctions.WebApi.Repository.Interfaces;
 using Auctions.WebApi.Repository.Repos;
@@ -19,7 +20,7 @@ public class AuctionController : ControllerBase
       
     }
     [HttpGet("{auctionId}/bids")]
-    public async Task <ActionResult<List<Bid>>> GetBidsByAuctionId(int auctionId)
+    public async Task <ActionResult<List<BidDTO>>> GetBidsByAuctionId(int auctionId)
     {
         var bids = await _auctionRepository.GetBidsByAuctionId(auctionId);
         if (bids == null)

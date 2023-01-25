@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Auctions.WebApi.DTOs.BidDTO;
-using Auctions.WebApi.Models;
+﻿using Auctions.WebApi.DTOs.BidDTO;
 using Auctions.WebApi.Repository.Interfaces;
-using Auctions.WebApi.Repository.Repos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auctions.WebApi.Controllers
-{ 
+{
     public class BidController : ControllerBase
     {
         private readonly IAuctionRepository _auctionRepository;
@@ -26,15 +20,14 @@ namespace Auctions.WebApi.Controllers
         public async Task <IActionResult> PlaceBid(int id, PlaceBidDTO bid)
         {
             var auction = await _auctionRepository.GetBidsByAuctionId(id);
-
+            
             var auctions = await _auctionRepository.GetAuctionByID(id);
 
             if (auction == null)
             {
-                return NotFound();  
+                return NotFound();
             }
-       
-            if (auction[0].UserId.UserId == bid.UserId)
+            if (bid.UserId == auctions.UserId)
             {
                 return BadRequest("User can not bid on their own auction.");
             }
@@ -47,8 +40,5 @@ namespace Auctions.WebApi.Controllers
             _bidRepository.PlaceBid(id, bid);
             return Ok();
         }
-   
-
     }
 }
-

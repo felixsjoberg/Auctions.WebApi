@@ -1,6 +1,4 @@
-﻿using System;
-using Auctions.WebApi.Models;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
 using Auctions.WebApi.Repository.Interfaces;
 using Dapper;
@@ -8,7 +6,7 @@ using Auctions.WebApi.DTOs.BidDTO;
 
 namespace Auctions.WebApi.Repository.Repos
 {
-	public class BidRepository:IBidRepository
+    public class BidRepository:IBidRepository
 	{
 
         private readonly string _connectionString;

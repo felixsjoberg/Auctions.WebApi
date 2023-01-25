@@ -1,15 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using Auctions.WebApi.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Auctions.WebApi.DTOs.BidDTO
 {
-	public class PlaceBidDTO
-	{
-        
+    public class PlaceBidDTO
+	{   
         [Required]
-        public int BidPrice { get; set; }
-        
+        public int BidPrice { get; set; }       
         public Guid UserId { get; set; }
     }
 }

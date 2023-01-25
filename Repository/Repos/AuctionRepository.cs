@@ -1,19 +1,9 @@
-﻿using System;
-using System.Buffers.Text;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Numerics;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.Intrinsics.X86;
-using System.Security.Cryptography;
-using Auctions.WebApi.Models;
+using Auctions.WebApi.DTOs.AuctionDTOs;
+using Auctions.WebApi.DTOs.BidDTO;
 using Auctions.WebApi.Repository.Interfaces;
 using Dapper;
-using Microsoft.AspNetCore.Http.HttpResults;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Auctions.WebApi.Repository.Repos
 {
@@ -25,20 +15,22 @@ namespace Auctions.WebApi.Repository.Repos
         {
             _connectionString = connectionString.GetConnectionString("Default");
         }
-        public async Task <List<Bid>> GetBidsByAuctionId(int auctionId)
+        public async Task<List<BidDTO>> GetBidsByAuctionId(int auctionId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 var param = new DynamicParameters();
                 param.Add("@AuctionID", auctionId);
-                return connection.Query<Bid>("searchopenAuctionbids", param, commandType: CommandType.StoredProcedure).ToList();
+                return connection.Query<BidDTO>("searchopenAuctionbids", param, commandType: CommandType.StoredProcedure).ToList();
             }
         }
-        public async Task<Auction?> GetAuctionByID(int ID)
+        public async Task<AuctionDTO?> GetAuctionByID(int ID)
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
-                var result = await db.QuerySingleOrDefaultAsync<Auction?>("GetInfoFromAuctionByID", new { ID }, commandType: CommandType.StoredProcedure);
+                var param = new DynamicParameters();
+                param.Add("@ID", ID);
+                var result =  await db.QuerySingleOrDefaultAsync<AuctionDTO?>("GetInfoFromAuctionByID", param, commandType: CommandType.StoredProcedure);
                 return result is not null ? result : null;
             }
         }
