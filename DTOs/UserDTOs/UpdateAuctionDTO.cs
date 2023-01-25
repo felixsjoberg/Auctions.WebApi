@@ -17,7 +17,7 @@ namespace Auctions.WebApi.DTOs.UserDTOs
         //[Required]
         //public string StartDate { get; set; } = null!;
         [Required]
-        public string EndDate { get; set; } = null!;
+        public DateTime EndDate { get; set; }
         [Required]
         public bool Status { get; set; }
     }

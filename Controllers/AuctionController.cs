@@ -14,40 +14,28 @@ namespace Auctions.WebApi.Controllers;
 public class AuctionController : ControllerBase
 {
 
-    // jag lägger till Auctiondelen men sparar övriga två eftersom användare måste vara inloggad för att lägga ett bud
+    // jag lï¿½gger till Auctiondelen men sparar ï¿½vriga tvï¿½ eftersom anvï¿½ndare mï¿½ste vara inloggad fï¿½r att lï¿½gga ett bud
     private readonly IUserRepository _userRepository;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IAuctionRepository _auctionRepository;
-    public AuthenticationController(IUserRepository userRepository, IJwtTokenGenerator jwtTokenGenerator)
+    public AuctionController(IUserRepository userRepository, IJwtTokenGenerator jwtTokenGenerator, IAuctionRepository auctionRepository)
     {
         _userRepository = userRepository;
         _jwtTokenGenerator = jwtTokenGenerator;
+        _auctionRepository = auctionRepository;
     }
 
-    [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginDTO loginDTO)
+    [HttpPost]
+    public async Task<IActionResult> CreateAuctionAsync(CreateAuctionDTO auction)
     {
-        var user = await _userRepository.LoginUser(loginDTO);
-        var token = _jwtTokenGenerator.GenerateToken(user);
-        UserDTO userDTO = new UserDTO
-        {
-            User = user,
-            Token = token
-        };
-        return user is not null ? Ok(userDTO) : NotFound();
+        var createdAuction = await _auctionRepository.CreateAuction(auction);
+
+        return Ok($"Auction created successfully with id {createdAuction}");
     }
 
-    [HttpPost("createauction")]
-    public async Task<IActionResult> CreateAuctionAsync(AuctionDTO auction)
-    {
-        var createdAuction = await _auctionRepository.CreatedAuction(auction);
-
-        return createdAuction == true ? Ok("Auction created successfully") : BadRequest("Auction was not created, please try again");
-    }
-
-    // Den här hör till någon annan Item egentligen
+    // Den hï¿½r hï¿½r till nï¿½gon annan Item egentligen
     [Authorize]
-    [HttpPut("updateauction")]
+    [HttpPut]
     public async Task<IActionResult> UpdateAuction(UpdateAuctionDTO update)
     {
         var auction = await _auctionRepository.UpdateAuction(update);
