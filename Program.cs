@@ -19,6 +19,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IUserRepository,UserRepository>();
 builder.Services.AddTransient<IAuctionRepository,AuctionRepository>();
 builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddTransient<IBidRepository, BidRepository>();
+
 
 var jwtSettings = new JwtSettings();
 builder.Services.AddSingleton(Options.Create(jwtSettings));

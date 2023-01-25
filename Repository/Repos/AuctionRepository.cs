@@ -1,10 +1,11 @@
-﻿using Auctions.WebApi.DTOs.UserDTOs;
+using Auctions.WebApi.DTOs.UserDTOs;
 using Auctions.WebApi.Models;
 using Dapper;
 using System.Data.SqlClient;
 using System.Data;
-using System.ComponentModel.DataAnnotations;
 using Auctions.WebApi.Repository.Interfaces;
+using Auctions.WebApi.DTOs.AuctionDTOs;
+using Auctions.WebApi.DTOs.BidDTO;
 
 namespace Auctions.WebApi.Repository.Repos
 {
@@ -37,6 +38,25 @@ namespace Auctions.WebApi.Repository.Repos
         public Task<Auction?> UpdateAuction(UpdateAuctionDTO auction)
         {
             throw new NotImplementedException();
+        }
+           public async Task<List<BidDTO>> GetBidsByAuctionId(int auctionId)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var param = new DynamicParameters();
+                param.Add("@AuctionID", auctionId);
+                return connection.Query<BidDTO>("searchopenAuctionbids", param, commandType: CommandType.StoredProcedure).ToList();
+            }
+        }
+        public async Task<AuctionDTO?> GetAuctionByID(int ID)
+        {
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                var param = new DynamicParameters();
+                param.Add("@ID", ID);
+                var result =  await db.QuerySingleOrDefaultAsync<AuctionDTO?>("GetInfoFromAuctionByID", param, commandType: CommandType.StoredProcedure);
+                return result is not null ? result : null;
+            }
         }
     }
 }

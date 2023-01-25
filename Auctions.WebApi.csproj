@@ -22,5 +22,12 @@
   <ItemGroup>
     <None Remove="Swashbuckle.AspNetCore.Filters" />
     <None Remove="Repository\Interfaces\" />
+    <None Remove="DTOs\BidDTO\" />
+    <None Remove="DTOs\AuctionDTOs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Repository\Interfaces\" />
+    <Folder Include="DTOs\BidDTO\" />
+    <Folder Include="DTOs\AuctionDTOs\" />
   </ItemGroup>
 </Project>

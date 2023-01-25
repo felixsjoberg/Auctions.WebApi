@@ -1,10 +1,10 @@
 using Auctions.WebApi.DTOs.UserDTOs;
-using Auctions.WebApi.DTOs;
+using Auctions.WebApi.DTOs.BidDTO;
+using Auctions.WebApi.Repository.Interfaces;
 using Auctions.WebApi.Repository.Repos;
 using BankApplication.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Auctions.WebApi.Repository.Interfaces;
 
 namespace Auctions.WebApi.Controllers;
 
@@ -40,5 +40,15 @@ public class AuctionController : ControllerBase
     {
         var auction = await _auctionRepository.UpdateAuction(update);
         return auction is not null ? Ok($"Update was Successful for AuctionID=\n{auction.AuctionId}") : NotFound();
+    }
+    [HttpGet("{auctionId}/bids")]
+    public async Task <ActionResult<List<BidDTO>>> GetBidsByAuctionId(int auctionId)
+    {
+        var bids = await _auctionRepository.GetBidsByAuctionId(auctionId);
+        if (bids == null)
+        {
+            return NotFound();
+        }
+        return bids;
     }
 }
