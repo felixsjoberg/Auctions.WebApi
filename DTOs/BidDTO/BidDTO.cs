@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Auctions.WebApi.DTOs.BidDTO;
 
 public class BidDTO

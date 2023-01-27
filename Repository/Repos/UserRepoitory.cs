@@ -3,7 +3,6 @@ using System.Data.SqlClient;
 using Auctions.WebApi.DTOs.UserDTOs;
 using Auctions.WebApi.Models;
 using Dapper;
-using Microsoft.Extensions.Configuration;
 
 namespace Auctions.WebApi.Repository.Repos;
 

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Auctions.WebApi.Controllers;
 
-
+[Authorize]
 [Route("Auction")]
 [ApiController]
 public class AuctionController : ControllerBase
@@ -25,6 +25,7 @@ public class AuctionController : ControllerBase
         _auctionRepository = auctionRepository;
     }
 
+    
     [HttpPost]
     public async Task<IActionResult> CreateAuctionAsync(CreateAuctionDTO auction)
     {
@@ -32,23 +33,43 @@ public class AuctionController : ControllerBase
 
         return Ok($"Auction created successfully with id {createdAuction}");
     }
+    
+    [HttpPost("{id}")]
+    public async Task<IActionResult> RemoveAuction(int id)
+    {
+        var removed = await _auctionRepository.RemoveAuction(id);
 
-    // Den h�r h�r till n�gon annan Item egentligen
-    [Authorize]
+        return Ok("Successfully removed");
+    }
+
+    
     [HttpPut]
     public async Task<IActionResult> UpdateAuction(UpdateAuctionDTO update)
     {
         var auction = await _auctionRepository.UpdateAuction(update);
         return auction is not null ? Ok($"Update was Successful for AuctionID=\n{auction.AuctionId}") : NotFound();
     }
-    [HttpGet("{auctionId}/bids")]
-    public async Task <ActionResult<List<BidDTO>>> GetBidsByAuctionId(int auctionId)
-    {
-        var bids = await _auctionRepository.GetBidsByAuctionId(auctionId);
-        if (bids == null)
+
+    [AllowAnonymous]
+    [HttpGet]
+        public async Task<IActionResult> GetAllAuctions()
         {
-            return NotFound();
+            var auctions = await _auctionRepository.GetAllAuctions();
+            return auctions is null? NotFound() : Ok(auctions);
         }
-        return bids;
-    }
+    [HttpGet("{id}")]
+        public async Task<IActionResult> Search(int id)
+        {
+             var auction = await _auctionRepository.GetAuctionByID(id);
+          
+            if (auction == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(auction);
+            }
+        }
+
 }

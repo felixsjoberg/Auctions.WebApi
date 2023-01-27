@@ -3,7 +3,6 @@ using Auctions.WebApi.Repository.Interfaces;
 using Auctions.WebApi.Repository.Repos;
 using BankApplication.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;

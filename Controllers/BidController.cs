@@ -1,5 +1,6 @@
 ﻿using Auctions.WebApi.DTOs.BidDTO;
 using Auctions.WebApi.Repository.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auctions.WebApi.Controllers
@@ -8,19 +9,29 @@ namespace Auctions.WebApi.Controllers
     {
         private readonly IAuctionRepository _auctionRepository;
         private readonly IBidRepository _bidRepository;
- 
-        public BidController(IAuctionRepository auctionRepository,IBidRepository bidRepository)
+
+        public BidController(IAuctionRepository auctionRepository, IBidRepository bidRepository)
         {
             _auctionRepository = auctionRepository;
             _bidRepository = bidRepository;
-          
-
         }
-        [HttpPost("{id}/bids")]
-        public async Task <IActionResult> PlaceBid(int id, PlaceBidDTO bid)
+        
+        [HttpGet("{auctionId}/bids")]
+        public async Task<ActionResult<List<BidDTO>>> GetBidsByAuctionId(int auctionId)
         {
-            var auction = await _auctionRepository.GetBidsByAuctionId(id);
-            
+            var bids = await _bidRepository.GetBidsByAuctionId(auctionId);
+            if (bids == null)
+            {
+                return NotFound();
+            }
+            return bids;
+        }
+        [Authorize]
+        [HttpPost("{id}/bids")]
+        public async Task<IActionResult> PlaceBid(int id, PlaceBidDTO bid)
+        {
+            var auction = await _bidRepository.GetBidsByAuctionId(id);
+
             var auctions = await _auctionRepository.GetAuctionByID(id);
 
             if (auction == null)
