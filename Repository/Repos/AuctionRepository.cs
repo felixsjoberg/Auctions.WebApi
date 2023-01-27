@@ -5,6 +5,10 @@ using System.Data.SqlClient;
 using System.Data;
 using System.ComponentModel.DataAnnotations;
 using Auctions.WebApi.Repository.Interfaces;
+using System;
+using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
+using System.Reflection.Metadata;
 
 namespace Auctions.WebApi.Repository.Repos
 {
@@ -12,9 +16,9 @@ namespace Auctions.WebApi.Repository.Repos
     {
         private readonly string _connectionString;
 
-        public AuctionRepository(IConfiguration connectionString)
+        public AuctionRepository(IConfiguration configuration)
         {
-            _connectionString = connectionString.GetConnectionString("Default");
+            _connectionString = configuration.GetConnectionString("Default");
         }
         public async Task<int> CreateAuction(CreateAuctionDTO auction)
         {
@@ -28,15 +32,37 @@ namespace Auctions.WebApi.Repository.Repos
                 parameters.Add("@Price", auction.Price);
                 parameters.Add("@StartDate", DateTime.Now);
                 parameters.Add("@EndDate", auction.EndDate);
-                db.ExecuteScalar("CreateAuction", parameters, commandType: CommandType.StoredProcedure);
+                db.ExecuteScalarAsync("CreateAuction", parameters, commandType: CommandType.StoredProcedure);
 
                 return parameters.Get<int>("@AuctionID");
-            }   
+            }
         }
 
-        public Task<Auction?> UpdateAuction(UpdateAuctionDTO auction)
+        public async Task<Auction?> UpdateAuction(UpdateAuctionDTO auction)
         {
-            throw new NotImplementedException();
+            using (IDbConnection db = new SqlConnection(_connectionString))
+            {
+                var sql = "SELECT COUNT(*) FROM Bids WHERE AuctionId = @auctionId";
+                var bidCount = await db.QueryFirstOrDefaultAsync<int>(sql, new { auctionId = auction.AuctionID });
+
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@AuctionID", auction.AuctionID);
+                parameters.Add("@Title", auction.Title);
+                parameters.Add("@Description", auction.Description);
+                parameters.Add("@EndDate", auction.EndDate);
+                parameters.Add("@Status", auction.Status);
+                if (bidCount == 0)
+                {
+                    parameters.Add("@Price", auction.Price);
+                }
+                else
+                {
+                    parameters.Add("@Price", 0);
+                }
+                var updatedAuction = await db.QueryFirstOrDefaultAsync<Auction>("UpdateAuction", parameters, commandType: CommandType.StoredProcedure);
+                await db.ExecuteScalarAsync("UpdateAuction", parameters, commandType: CommandType.StoredProcedure);
+                return updatedAuction;
+            }
         }
     }
 }
