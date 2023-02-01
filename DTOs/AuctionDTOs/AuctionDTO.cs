@@ -9,6 +9,8 @@ public class AuctionDTO
     [Key]
     public int AuctionId { get; set; }
     [Required]
+    public string Title { get; set; } = null!;
+    [Required]
     public string Description { get; set; } = null!;
     [Required]
     public int Price { get; set; }
@@ -20,4 +22,3 @@ public class AuctionDTO
     public Boolean Status { get; set; }
     public Guid UserId { get; set; }
 }
-

@@ -6,6 +6,7 @@ namespace Auctions.WebApi.Repository.Interfaces
     {
         void PlaceBid(int auctionId, PlaceBidDTO bid);
         Task<List<BidDTO>> GetBidsByAuctionId(int auctionId);
+        Task <Boolean> RemoveBid(int bidId);
     }
 }
 

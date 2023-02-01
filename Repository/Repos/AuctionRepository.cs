@@ -34,34 +34,33 @@ namespace Auctions.WebApi.Repository.Repos
                 db.ExecuteScalar("CreateAuction", parameters, commandType: CommandType.StoredProcedure);
 
                 return parameters.Get<int>("@AuctionID");
-            }   
+            }
         }
 
-        public async Task<Auction?> UpdateAuction(UpdateAuctionDTO auction)
+        public async Task<AuctionDTO?> UpdateAuction(UpdateAuctionDTO auction)
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
-                var sql = "SELECT COUNT(*) FROM Bids WHERE AuctionId = @auctionId";
-                var bidCount = await db.QueryFirstOrDefaultAsync<int>(sql, new { auctionId = auction.AuctionID });
-                //AUGUST: Har ej gått igenom denna, du får testa se till att allt fungerar som du tänkt.
+                var sql = $"SELECT COUNT(*) FROM Bids WHERE AuctionId = {auction.AuctionID}";
+                var bidCount = await db.QueryFirstOrDefaultAsync<int>(sql);
+
+                var dbAuction = await GetAuctionByID(auction.AuctionID);
 
                 DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@AuctionID", auction.AuctionID);
                 parameters.Add("@Title", auction.Title);
                 parameters.Add("@Description", auction.Description);
                 parameters.Add("@EndDate", auction.EndDate);
-                parameters.Add("@Status", auction.Status);
                 if (bidCount == 0)
                 {
                     parameters.Add("@Price", auction.Price);
                 }
                 else
                 {
-                    parameters.Add("@Price", 0);
+                    return null;
                 }
-                var updatedAuction = await db.QueryFirstOrDefaultAsync<Auction>("UpdateAuction", parameters, commandType: CommandType.StoredProcedure);
                 await db.ExecuteScalarAsync("UpdateAuction", parameters, commandType: CommandType.StoredProcedure);
-                return updatedAuction;
+                return dbAuction is not null ? dbAuction : null;
             }
         }
 
@@ -87,12 +86,15 @@ namespace Auctions.WebApi.Repository.Repos
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
-                var bids=  _bidRepository.GetBidsByAuctionId(id);
-                //AUGUST: gör så att det inte går att ta bort en med bud, 
-                //denna fungerar med att ta bort, men har den bud så kommer denna funktion nog få error,
-                //hantera dem.
-                var result = await db.ExecuteScalarAsync("RemoveAuction", new { @AuctionId = id }, commandType: CommandType.StoredProcedure);
-                return result is not null ? false : true;
+                var bids=  await _bidRepository.GetBidsByAuctionId(id);
+
+                if (bids.Count > 0)
+                {
+                    return false;
+                }
+
+                var result = await db.ExecuteAsync("RemoveAuction", new { @AuctionId = id }, commandType: CommandType.StoredProcedure);
+                return result == 0 ? false : true;
             }
         }
     }

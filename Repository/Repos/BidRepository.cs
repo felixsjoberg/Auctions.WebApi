@@ -29,18 +29,14 @@ namespace Auctions.WebApi.Repository.Repos
                 conn.Execute("PlaceBid", para, commandType: CommandType.StoredProcedure);
             }
         }
-        public void RemoveBid(int auctionId, int bidId, Guid userId, int bidPrice, DateTime bidDate, bool status)
+        public async Task<Boolean> RemoveBid(int bidId)
         {
             using (IDbConnection db = new SqlConnection(_connectionString))
             {
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@AuctionID", auctionId);
                 parameters.Add("@BidId", bidId);
-                parameters.Add("@UserID", userId);
-                parameters.Add("@BidPrice", bidPrice);
-                parameters.Add("@BidDate", bidDate);
-                parameters.Add("@Status", status);
-                db.ExecuteScalar("RemoveBid", parameters, commandType: CommandType.StoredProcedure);
+                var result = await db.ExecuteAsync("RemoveBid", parameters, commandType: CommandType.StoredProcedure);
+                return result == 0 ? false : true;
             }
         }
         public async Task<List<BidDTO>> GetBidsByAuctionId(int auctionId)

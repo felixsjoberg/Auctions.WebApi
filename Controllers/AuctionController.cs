@@ -34,12 +34,12 @@ public class AuctionController : ControllerBase
         return Ok($"Auction created successfully with id {createdAuction}");
     }
     
-    [HttpPost("{id}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> RemoveAuction(int id)
     {
         var removed = await _auctionRepository.RemoveAuction(id);
 
-        return Ok("Successfully removed");
+        return removed is true ? Ok("Successfully removed auction") : NotFound("Not a valid Auction or Auction has bids already.");
     }
 
     
@@ -47,7 +47,7 @@ public class AuctionController : ControllerBase
     public async Task<IActionResult> UpdateAuction(UpdateAuctionDTO update)
     {
         var auction = await _auctionRepository.UpdateAuction(update);
-        return auction is not null ? Ok($"Update was Successful for AuctionID=\n{auction.AuctionId}") : NotFound();
+        return auction is not null ? Ok($"Update was Successful for AuctionID={auction.AuctionId}") : NotFound("Didn't find the auction or can't update auctionPrice");
     }
 
     [AllowAnonymous]
@@ -71,5 +71,4 @@ public class AuctionController : ControllerBase
                 return Ok(auction);
             }
         }
-
 }

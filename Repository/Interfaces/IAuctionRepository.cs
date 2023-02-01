@@ -8,7 +8,7 @@ namespace Auctions.WebApi.Repository.Interfaces
     public interface IAuctionRepository
     {
         Task<int> CreateAuction(CreateAuctionDTO action);
-        Task<Auction?> UpdateAuction(UpdateAuctionDTO auction);
+        Task<AuctionDTO?> UpdateAuction(UpdateAuctionDTO auction);
         Task<AuctionDTO?> GetAuctionByID(int ID);
         Task<IEnumerable<AuctionDTO>>? GetAllAuctions();
         Task<Boolean> RemoveAuction(int id);

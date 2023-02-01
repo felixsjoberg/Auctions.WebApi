@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Auctions.WebApi.Controllers
 {
+    [Authorize]
     public class BidController : ControllerBase
     {
         private readonly IAuctionRepository _auctionRepository;
@@ -14,8 +15,7 @@ namespace Auctions.WebApi.Controllers
         {
             _auctionRepository = auctionRepository;
             _bidRepository = bidRepository;
-        }
-        
+        }         
         [HttpGet("{auctionId}/bids")]
         public async Task<ActionResult<List<BidDTO>>> GetBidsByAuctionId(int auctionId)
         {
@@ -50,6 +50,12 @@ namespace Auctions.WebApi.Controllers
 
             _bidRepository.PlaceBid(id, bid);
             return Ok();
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveBid(int id)
+        {
+            var result = await _bidRepository.RemoveBid(id);
+            return result is false ? BadRequest() : NotFound();
         }
     }
 }
