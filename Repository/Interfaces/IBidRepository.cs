@@ -1,12 +1,15 @@
-﻿using Auctions.WebApi.DTOs.BidDTO;
+﻿using System;
+using Auctions.WebApi.DTOs.BidDTO;
+using Auctions.WebApi.Models;
 
 namespace Auctions.WebApi.Repository.Interfaces
 {
-    public interface IBidRepository
+	public interface IBidRepository
     {
-        void PlaceBid(int auctionId, PlaceBidDTO bid);
+        //public void PlaceBid(int auctionId, PlaceBidDTO bid);
+        Task PlaceBid(int auctionId, PlaceBidDTO bid);
         Task<List<BidDTO>> GetBidsByAuctionId(int auctionId);
-        Task <Boolean> RemoveBid(int bidId);
+        Task<BidDTO> GetHighestBidByAuctionId(int auctionId);
     }
 }
 
