@@ -1,5 +1,4 @@
 using Auctions.WebApi.DTOs.UserDTOs;
-using Auctions.WebApi.DTOs.BidDTO;
 using Auctions.WebApi.Repository.Interfaces;
 using Auctions.WebApi.Repository.Repos;
 using BankApplication.Infrastructure.Authentication;

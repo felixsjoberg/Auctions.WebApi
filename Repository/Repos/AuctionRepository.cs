@@ -1,11 +1,9 @@
 using Auctions.WebApi.DTOs.UserDTOs;
-using Auctions.WebApi.Models;
 using Dapper;
 using System.Data.SqlClient;
 using System.Data;
 using Auctions.WebApi.Repository.Interfaces;
 using Auctions.WebApi.DTOs.AuctionDTOs;
-using Auctions.WebApi.DTOs.BidDTO;
 
 namespace Auctions.WebApi.Repository.Repos
 {

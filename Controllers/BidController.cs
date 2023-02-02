@@ -48,14 +48,13 @@ namespace Auctions.WebApi.Controllers
                 return BadRequest("Bid is too low.");
             }
 
-            _bidRepository.PlaceBid(id, bid);
-            return Ok();
+            return Ok( _bidRepository.PlaceBid(id, bid));
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveBid(int id)
         {
             var result = await _bidRepository.RemoveBid(id);
-            return result is false ? BadRequest() : NotFound();
+            return result is false ? NotFound() : Ok();
         }
     }
 }

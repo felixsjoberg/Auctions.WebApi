@@ -1,6 +1,5 @@
 ﻿using Auctions.WebApi.DTOs;
 using Auctions.WebApi.DTOs.UserDTOs;
-using Auctions.WebApi.Models;
 using Auctions.WebApi.Repository.Repos;
 using BankApplication.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authorization;
