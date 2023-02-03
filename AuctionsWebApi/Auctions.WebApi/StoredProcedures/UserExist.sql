@@ -1,0 +1,14 @@
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[UserExist]
+    @Email NVARCHAR(50),
+    @UserName NVARCHAR(50)
+AS
+BEGIN
+    SELECT * FROM [Users]
+    WHERE Email = @email OR UserName=@UserName
+END
+GO
